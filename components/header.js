@@ -1,8 +1,36 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import { isAuthenticated } from "../pages";
+import { AuthContext } from "../context/AuthContext";
+import { logout } from "../pages/api/axios";
+import Swal from "sweetalert2";
 
 function Header({ simple, hideAuth }) {
-  let title = process.env.APP_NAME;
+  const { isAuthenticated } = useContext(AuthContext);
+
+  async function logoutHandler() {
+    try {
+      const result = await logout();
+      const data = result?.data;
+      const bool = result?.status === 200;
+
+      Swal.fire({
+        title: data?.message || "Se produjo un error al obtener una respuesta",
+        text: bool
+          ? "Gracias por visitarnos"
+          : "Si el error persiste comunicate con soporte.",
+        icon: bool ? "success" : "error",
+      }).then((result) => {
+        if (result.isConfirmed && bool) {
+          window.location.reload();
+        }
+      });
+    } catch (error) {
+      alert("Se produjo un error");
+    }
+  }
+
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
@@ -14,7 +42,7 @@ function Header({ simple, hideAuth }) {
                 className="d-inline-block"
               /> */}
               <span className="ms-2 mb-0 h4 text-primary fw-bold">
-                Mocha Mart
+                BasilOrien Mart
               </span>
             </a>
           </Link>
@@ -35,7 +63,16 @@ function Header({ simple, hideAuth }) {
             </form>
           </div>
           <div className="d-flex">
-            {!hideAuth && (
+            {hideAuth ? null : isAuthenticated ? (
+              <button
+                onClick={(e) => {
+                  logoutHandler(e);
+                }}
+                className="btn btn-outline-primary d-none d-md-block"
+              >
+                Cerrar sesion
+              </button>
+            ) : (
               <>
                 <Link href="/auth/login">
                   <a className="btn btn-outline-primary d-none d-md-block">
@@ -106,35 +143,6 @@ function Header({ simple, hideAuth }) {
                   <Link href="/explore">
                     <a className="nav-link">Cosmetics</a>
                   </Link>
-                </li>
-              </ul>
-              <ul className="ms-auto navbar-nav">
-                <li className="nav-item dropdown">
-                  <a
-                    href="#"
-                    className="nav-link dropdown-toggle"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    id="languageMenuLink"
-                  >
-                    English
-                  </a>
-                  <ul
-                    className="dropdown-menu dropdown-menu-macos dropdown-menu-end"
-                    aria-labelledby="languageMenuLink"
-                  >
-                    <li>
-                      <a href="#" className="dropdown-item">
-                        English
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="dropdown-item mt-1">
-                        Myanmar
-                      </a>
-                    </li>
-                  </ul>
                 </li>
               </ul>
             </div>

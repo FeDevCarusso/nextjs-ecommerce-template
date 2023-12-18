@@ -1,8 +1,11 @@
 import Head from "next/head";
 import Footer from "./footer";
 import Header from "./header";
+import AuthProvider, { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 function Layout({ simpleHeader, hideAuth, children }) {
+  const { isChecked } = useContext(AuthContext);
   return (
     <>
       <Head>
@@ -10,15 +13,25 @@ function Layout({ simpleHeader, hideAuth, children }) {
         <meta name="theme-color" content="#ffffff" />
         <meta name="description" content="Best e-commerce app" />
         <link rel="icon" href="/favicon.ico" />
-        <title>Mocha Mart</title>
+        <title>BasilOrien Mart</title>
       </Head>
-      <div className="d-flex flex-column h-100">
-        <Header simple={simpleHeader} hideAuth={hideAuth} />
-        <main className="flex-shrink-0">{children}</main>
-        <Footer />
-      </div>
+      {!isChecked ? null : (
+        <div className="d-flex flex-column h-100">
+          <Header simple={simpleHeader} hideAuth={hideAuth} />
+          <main className="flex-shrink-0">{children}</main>
+          <Footer />
+        </div>
+      )}
     </>
   );
 }
 
-export default Layout;
+function LayoutProvider({ children }) {
+  return (
+    <AuthProvider>
+      <Layout>{children}</Layout>
+    </AuthProvider>
+  );
+}
+
+export default LayoutProvider;

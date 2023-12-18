@@ -7,6 +7,7 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import Layout from "../components/layout";
+import AuthProvider from "../context/AuthContext";
 
 config.autoAddCss = false;
 library.add(fab, fas, far);
@@ -18,13 +19,17 @@ if (typeof window !== "undefined") {
 function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout;
   if (getLayout) {
-    return getLayout(<Component {...pageProps} />);
+    return getLayout(
+      <AuthProvider>{<Component {...pageProps} />}</AuthProvider>
+    );
   }
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <AuthProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </AuthProvider>
   );
 }
 

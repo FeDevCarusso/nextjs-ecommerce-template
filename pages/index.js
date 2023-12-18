@@ -2,8 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Carousel } from "react-responsive-carousel";
 import ProductSimpleCard from "../components/product/product-simple-card";
 
+
 export default function Home() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8];
+
+
 
   return (
     <div>
@@ -13,9 +16,9 @@ export default function Home() {
             <Carousel
               autoPlay={true}
               infiniteLoop={true}
-              showArrows={false}
-              showStatus={false}
-              showThumbs={false}
+              showArrows={true}
+              showStatus={true}
+              showThumbs={true}
               transitionTime={500}
               renderIndicator={(onClickHandler, isSelected, index, label) => {
                 if (isSelected) {
@@ -138,25 +141,7 @@ export default function Home() {
           })}
         </div>
       </div>
-      {/* <div className="d-flex flex-column align-items-center bg-primary py-5">
-        <span className="mb-4 text-light text-opacity-75">
-          Subscribe for promotions and wonderful events
-        </span>
-        <form className="d-flex">
-          <div className="me-2">
-            <input
-              type="email"
-              className="form-control"
-              placeholder="Your email"
-              size="24"
-            />
-          </div>
-          <button className="btn btn-warning">
-            <FontAwesomeIcon icon={["fas", "envelope"]} className="me-2" />
-            Subscribe
-          </button>
-        </form>
-      </div> */}
     </div>
   );
 }
+
